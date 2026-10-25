@@ -1,27 +1,37 @@
 package modeloNave;
 
+import enums.Estado;
+
 public class Escudo {
-private boolean activo;
-private int energia;
+private Estado estado;
+private int vida;
 
-    public Escudo(int energia, boolean activo) {
-        this.energia = energia;
-        this.activo = activo;
+    public Escudo(int vida, Estado estado) {
+        if (vida<0){
+            vida=0;
+        }
+        if (vida>100){
+            vida=100;
+        }
+        this.vida = vida;
+        this.estado = estado;
     }
 
-    public boolean isActivo() {
-        return activo;
+
+
+    public int getVida() {
+        return vida;
     }
 
-    public int isEnergia() {
-        return energia;
+    public Estado getEstado() {
+        return estado;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
-    public void setEnergia(int energia) {
-        this.energia = energia;
+    public void setVida(int energia) {
+        this.vida = energia;
     }
 }

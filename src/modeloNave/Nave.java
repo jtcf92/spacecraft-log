@@ -1,21 +1,22 @@
 package modeloNave;
 
+import interfaces.Danable;
+import interfaces.Movible;
 import modeloArma.Arma;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
-public class Nave {
+public class Nave implements Danable, Movible {
     private String nombre;
     private MotorDeCohete motor;
-    private Map<PosicionEscudo, Escudo> escudos;
+    private Escudo escudo;
     private Arma[] armas;
 
     public Nave(MotorDeCohete motor, String nombre) {
         this.motor = motor;
         this.nombre = nombre;
-        this.escudos = new EnumMap<>(PosicionEscudo.class);
+        this.escudo =escudo;
         this.armas = new Arma[2];
     }
 
@@ -29,9 +30,7 @@ public class Nave {
         return nombre;
     }
 
-    public Escudo getEscudo(PosicionEscudo posicion) {
-        return escudos.get(posicion);
-    }
+
 
     public Arma getArma(int indice) {
         if (indice < 0 || indice >= armas.length) {
@@ -49,15 +48,12 @@ public class Nave {
         this.motor = motor;
     }
 
-    public boolean setEscudo(PosicionEscudo posicion, Escudo escudo){
-        if (posicion == null || escudo == null) {
-            return false;
-        }
-        if (!escudos.containsKey(posicion)){
-            escudos.put(posicion,escudo);
-            return true;
-        }
-        return false;
+    public Escudo getEscudo() {
+        return escudo;
+    }
+
+    public void setEscudo(Escudo escudo) {
+        this.escudo = escudo;
     }
 
     public boolean setArma(int indice, Arma arma) {
@@ -71,5 +67,15 @@ public class Nave {
 
         armas[indice] = arma;
         return true;
+    }
+
+    @Override
+    public void recibirDanio(int cantidad) {
+
+    }
+
+    @Override
+    public boolean mover(int distancia) {
+        return false;
     }
 }

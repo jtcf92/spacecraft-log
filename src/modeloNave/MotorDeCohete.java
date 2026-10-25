@@ -1,13 +1,15 @@
 package modeloNave;
 
+import enums.Estado;
+
 public class MotorDeCohete {
     private String numeroDeSerie;
     private int energia;
-    private boolean activo;
-    public MotorDeCohete( String numeroDeSerie) {
-        this.energia = 0;
+    private Estado estado;
+    public MotorDeCohete( int energia,String numeroDeSerie,Estado estado) {
+        this.energia = energia;
         this.numeroDeSerie = numeroDeSerie;
-        activo= false;
+        this.estado=estado;
     }
 
     public String getNumeroDeSerie() {
@@ -18,9 +20,7 @@ public class MotorDeCohete {
         return energia;
     }
 
-    public boolean isActivo() {
-        return activo;
-    }
+
 
     public void setNumeroDeSerie(String numeroDeSerie) {
         this.numeroDeSerie = numeroDeSerie;
@@ -30,7 +30,11 @@ public class MotorDeCohete {
         this.energia = energia;
     }
 
-    public void setActivo(boolean activo) {
-        this.activo = activo;
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 }
