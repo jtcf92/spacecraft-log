@@ -13,11 +13,11 @@ public class RegistroBinario {
 
     private static final int LONGITUD_ID = 20;
 
-    // int (4) + 20 chars (20 * 2) + byte (1) + double (8) + boolean (1) = 54
+    // int (4) + 20 chars (40) + int tipo (4) + double (8) + boolean (1) = 57
     private static final int TAMANO_REGISTRO =
             Integer.BYTES
                     + LONGITUD_ID * Character.BYTES
-                    + Byte.BYTES
+                    + Integer.BYTES
                     + Double.BYTES
                     + 1;
 
@@ -167,7 +167,7 @@ public class RegistroBinario {
             }
         }
 
-        archivo.writeByte(medicion.getTipo().getCodigo());
+        archivo.writeInt(medicion.getTipo().getCodigo());
         archivo.writeDouble(medicion.getValor());
         archivo.writeBoolean(medicion.isAnomala());
     }
@@ -183,7 +183,7 @@ public class RegistroBinario {
 
         String componente = idComponente.toString().trim();
 
-        byte codigoTipo = archivo.readByte();
+        int codigoTipo = archivo.readInt();
         TipoMedicion tipo = TipoMedicion.desdeCodigo(codigoTipo);
 
         double valor = archivo.readDouble();

@@ -64,18 +64,6 @@ public class RegistroXML {
         agregarElemento(
                 documento,
                 elementoMotor,
-                "energia",
-                String.valueOf(motor.getEnergia())
-        );
-        agregarElemento(
-                documento,
-                elementoMotor,
-                "temperatura",
-                String.valueOf(motor.getCalor())
-        );
-        agregarElemento(
-                documento,
-                elementoMotor,
                 "estado",
                 motor.getEstado().name()
         );
@@ -88,7 +76,6 @@ public class RegistroXML {
         if (escudo != null) {
             Element elementoEscudo = documento.createElement("escudo");
 
-            agregarElemento(documento, elementoEscudo, "vida", String.valueOf(escudo.getVida()));
             agregarElemento(documento, elementoEscudo, "estado", escudo.getEstado().name());
 
             raiz.appendChild(elementoEscudo);
@@ -107,8 +94,6 @@ public class RegistroXML {
             Element elementoArma = documento.createElement("arma");
 
             agregarElemento(documento, elementoArma, "nombre", arma.getNombre());
-            agregarElemento(documento, elementoArma, "danio", String.valueOf(arma.getDanio()));
-            agregarElemento(documento, elementoArma, "costeEnergia", String.valueOf(arma.getCosteEnergia()));
             agregarElemento(documento, elementoArma, "estado", arma.getEstado().name());
 
             elementoArmas.appendChild(elementoArma);

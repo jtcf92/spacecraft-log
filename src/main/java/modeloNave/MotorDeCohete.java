@@ -7,6 +7,7 @@ public class MotorDeCohete {
     private int energia;
     private Estado estado;
     private double calor;
+    private static final double TEMPERATURA_AMBIENTE = 20.0;
     public MotorDeCohete(String numeroDeSerie,Estado estado) {
         this.calor = 20.0;
         this.energia = 0;
@@ -55,5 +56,13 @@ public class MotorDeCohete {
         }
 
         this.calor = calor;
+    }
+
+    public void calentar(double grados) {
+        this.calor += grados;
+    }
+
+    public void enfriar(double grados) {
+        this.calor = Math.max(TEMPERATURA_AMBIENTE, this.calor - grados);
     }
 }

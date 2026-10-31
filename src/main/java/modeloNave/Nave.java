@@ -12,28 +12,21 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class Nave implements Danable, Movible {
-    private RegistroTexto rt;
+
     private String nombre;
     private MotorDeCohete motor;
     private Escudo escudo;
     private Arma[] armas;
 
-    public Nave(MotorDeCohete motor, String nombre) throws IOException {
+    public Nave(MotorDeCohete motor, String nombre)  {
         this.motor = motor;
         this.nombre = nombre;
         this.armas = new Arma[2];
-      rt = new RegistroTexto(Path.of("datos","Registro.txt"));
-            rt.registrar("Se ha ensamblado la nave :" + nombre);
+
 
     }
 
-    private void registrar(String mensaje) {
-        try {
-            rt.registrar(mensaje);
-        } catch (IOException e) {
-            System.err.println("Error al escribir en el registro de texto: " + e.getMessage());
-        }
-    }
+
 
     public MotorDeCohete getMotor() {
         return motor;
@@ -77,7 +70,7 @@ public class Nave implements Danable, Movible {
             return false;
         }
         armas[indice] = arma;
-        registrar("Se ha equipado " + arma.getNombre() + " en el slot " + indice);
+
         return true;
     }
 
@@ -106,34 +99,40 @@ public class Nave implements Danable, Movible {
 
     @Override
     public boolean mover(int distancia) {
-
-
         if (distancia <= 0) {
             return false;
         }
-
-
         if (motor == null) {
             return false;
         }
-
-
         if (motor.getEstado() != Estado.OPERATIVO) {
             return false;
         }
-
-
         if (motor.getEnergia() < 5) {
             return false;
         }
 
-
         motor.setEnergia(motor.getEnergia() - 5);
-
+        motor.calentar(8);
         return true;
     }
+    public boolean disparar(int indice) {
+        Arma arma = getArmaPorIndice(indice);
 
+        if (arma == null || arma.getEstado() != Estado.OPERATIVO) {
+            return false;
+        }
+        if (motor == null || motor.getEstado() != Estado.OPERATIVO) {
+            return false;
+        }
+        if (motor.getEnergia() < arma.getCosteEnergia()) {
+            return false;
+        }
 
+        motor.setEnergia(motor.getEnergia() - arma.getCosteEnergia());
+        motor.calentar(arma.getCosteEnergia() * 0.8);   // más coste = más calor
+        return true;
+    }
     public Arma[] getArmas() {
         return armas;
     }
