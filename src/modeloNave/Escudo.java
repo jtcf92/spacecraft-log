@@ -31,7 +31,7 @@ private int vida;
         this.estado = estado;
     }
 
-    public void setVida(int energia) {
-        this.vida = energia;
+    public void setVida(int vida) {
+        this.vida = vida;
     }
 }

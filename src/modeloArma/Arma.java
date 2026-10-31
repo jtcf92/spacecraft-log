@@ -37,5 +37,13 @@ public class Arma {
     public void setCosteEnergia(int costeEnergia) {
         this.costeEnergia = costeEnergia;
     }
+
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
 }
 

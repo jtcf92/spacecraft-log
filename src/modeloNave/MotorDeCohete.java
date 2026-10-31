@@ -6,8 +6,10 @@ public class MotorDeCohete {
     private String numeroDeSerie;
     private int energia;
     private Estado estado;
-    public MotorDeCohete( int energia,String numeroDeSerie,Estado estado) {
-        this.energia = energia;
+    private double calor;
+    public MotorDeCohete(String numeroDeSerie,Estado estado) {
+        this.calor = 20.0;
+        this.energia = 0;
         this.numeroDeSerie = numeroDeSerie;
         this.estado=estado;
     }
@@ -27,6 +29,12 @@ public class MotorDeCohete {
     }
 
     public void setEnergia(int energia) {
+        if (energia<0){
+            energia=0;
+        }
+        if (energia>100){
+            energia=100;
+        }
         this.energia = energia;
     }
 
@@ -36,5 +44,16 @@ public class MotorDeCohete {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+    public double getCalor() {
+        return calor;
+    }
+
+    public void setCalor(double calor) {
+        if (calor < 0) {
+            throw new IllegalArgumentException("El calor no puede ser negativo.");
+        }
+
+        this.calor = calor;
     }
 }

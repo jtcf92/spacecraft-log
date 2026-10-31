@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface Danable {
-    void recibirDanio(int cantidad);
+    boolean recibirDanio(int cantidad);
 }
