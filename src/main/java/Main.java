@@ -9,16 +9,15 @@ import modeloNave.Nave;
 import persistencia.Persistencia;
 import simulador.Simulador;
 
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        Path rutaDatosEntrada = null;
+
+        Path rutaDatosEntrada = Path.of("datos");
+        Path rutaDatosSalida = Path.of("ResultadoForense");
+
         try {
-            rutaDatosEntrada = Path.of("datos");
             Persistencia persistencia = new Persistencia(rutaDatosEntrada);
             persistencia.reiniciar();
 
@@ -37,13 +36,26 @@ public class Main {
 
             if (modoPrueba) {
                 // Modo prueba: escribes tú el incidente que quieres forzar
-                simulador.ejecutar(4, TipoIncidente.PERDIDA_ESCUDOS);
+                simulador.ejecutar(4, TipoIncidente.FALLO_ARMAMENTO);
             } else {
                 // Modo normal: el simulador elige un incidente al azar
                 simulador.ejecutar(4);
             }
 
         } catch (EventoCriticoException e) {
+            System.out.println("Se ha detectado un evento crítico: " + e.getMessage());
+            System.out.println("Se activa el analizador forense...");
+
+            try {
+                AnalizadorForense analizador =
+                        new AnalizadorForense(rutaDatosEntrada, rutaDatosSalida);
+
+                System.out.println("Incidente identificado: " + analizador.getIncidente());
+                System.out.println("Compruebe los ficheros generados en " + rutaDatosSalida);
+
+            } catch (Exception ex) {
+                System.err.println("Error en el analizador: " + ex.getMessage());
+            }
 
         } catch (Exception e) {
             System.err.println("Error inesperado: " + e.getMessage());
