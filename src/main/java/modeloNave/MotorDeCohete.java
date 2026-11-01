@@ -8,6 +8,8 @@ public class MotorDeCohete {
     private Estado estado;
     private double calor;
     private static final double TEMPERATURA_AMBIENTE = 20.0;
+    public static final double CALOR_CRITICO = 120;
+    public static final int ENERGIA_MINIMA = 5;
     public MotorDeCohete(String numeroDeSerie,Estado estado) {
         this.calor = 20.0;
         this.energia = 0;
@@ -18,7 +20,9 @@ public class MotorDeCohete {
     public String getNumeroDeSerie() {
         return numeroDeSerie;
     }
-
+    public String getId() {
+        return "MOTOR-" + numeroDeSerie;
+    }
     public int getEnergia() {
         return energia;
     }
@@ -62,7 +66,16 @@ public class MotorDeCohete {
         this.calor += grados;
     }
 
+
     public void enfriar(double grados) {
         this.calor = Math.max(TEMPERATURA_AMBIENTE, this.calor - grados);
     }
+    public boolean estaSobrecalentado() {
+        return calor >= CALOR_CRITICO;
+    }
+
+    public boolean tieneEnergiaMinima() {
+        return energia >= ENERGIA_MINIMA;
+    }
 }
+

@@ -56,10 +56,8 @@ public class RegistroXML {
         Element elementoMotor =
                 documento.createElement("motor");
 
-        elementoMotor.setAttribute(
-                "numeroDeSerie",
-                motor.getNumeroDeSerie()
-        );
+        elementoMotor.setAttribute("numeroDeSerie", motor.getNumeroDeSerie());
+        elementoMotor.setAttribute("id", motor.getId());
 
         agregarElemento(
                 documento,
@@ -75,7 +73,7 @@ public class RegistroXML {
 
         if (escudo != null) {
             Element elementoEscudo = documento.createElement("escudo");
-
+            elementoEscudo.setAttribute("id", escudo.getId());
             agregarElemento(documento, elementoEscudo, "estado", escudo.getEstado().name());
 
             raiz.appendChild(elementoEscudo);
@@ -92,7 +90,7 @@ public class RegistroXML {
             }
 
             Element elementoArma = documento.createElement("arma");
-
+            elementoArma.setAttribute("id", arma.getId());
             agregarElemento(documento, elementoArma, "nombre", arma.getNombre());
             agregarElemento(documento, elementoArma, "estado", arma.getEstado().name());
 

@@ -45,5 +45,8 @@ public class Arma {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
+    public String getId() {
+        return "ARMA-" + nombre.toUpperCase();
+    }
 }
 

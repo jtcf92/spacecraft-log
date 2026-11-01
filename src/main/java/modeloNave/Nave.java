@@ -108,7 +108,7 @@ public class Nave implements Danable, Movible {
         if (motor.getEstado() != Estado.OPERATIVO) {
             return false;
         }
-        if (motor.getEnergia() < 5) {
+        if (!motor.tieneEnergiaMinima()) {
             return false;
         }
 

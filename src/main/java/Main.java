@@ -1,4 +1,6 @@
+import analizadorForense.AnalizadorForense;
 import enums.Estado;
+import enums.TipoIncidente;
 import excepciones.EventoCriticoException;
 import modeloArma.Arma;
 import modeloNave.Escudo;
@@ -9,12 +11,17 @@ import simulador.Simulador;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        Path rutaDatosEntrada = null;
         try {
-            Persistencia persistencia = new Persistencia(Path.of("datos"));
+            rutaDatosEntrada = Path.of("datos");
+            Persistencia persistencia = new Persistencia(rutaDatosEntrada);
             persistencia.reiniciar();
+
             MotorDeCohete motor = new MotorDeCohete("1234", Estado.OPERATIVO);
             motor.setEnergia(50);
 
@@ -23,21 +30,23 @@ public class Main {
             nave.setArma(0, new Arma("Laser", 50, 10, Estado.OPERATIVO));
             nave.setArma(1, new Arma("Torpedo", 100, 25, Estado.OPERATIVO));
 
-            persistencia.registrarEvento("Nave ensamblada: " + nave.getNombre());
+            Simulador simulador = new Simulador(persistencia, nave);
 
-            new Simulador(persistencia, nave).ejecutar(15);
+            // ===== ELIGE EL MODO =====
+            boolean modoPrueba = true;
 
-            System.out.println("Simulación terminada. Revisa la carpeta datos/");
+            if (modoPrueba) {
+                // Modo prueba: escribes tú el incidente que quieres forzar
+                simulador.ejecutar(4, TipoIncidente.PERDIDA_ESCUDOS);
+            } else {
+                // Modo normal: el simulador elige un incidente al azar
+                simulador.ejecutar(4);
+            }
 
-        } catch (EventoCriticoException ece) {
-            System.err.println("EVENTO CRÍTICO: " + ece.getMessage());
-            System.err.println("Los datos ya están guardados en datos ");
-            //Ejecuta el analizador.
-        } catch (IOException ioe) {
-            System.err.println("Error de escritura: " + ioe.getMessage());
+        } catch (EventoCriticoException e) {
+
         } catch (Exception e) {
             System.err.println("Error inesperado: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 }

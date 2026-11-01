@@ -34,4 +34,7 @@ private int vida;
     public void setVida(int vida) {
         this.vida = vida;
     }
+    public String getId() {
+        return "ESCUDO";
+    }
 }

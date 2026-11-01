@@ -33,6 +33,10 @@ public class Persistencia {
     public void registrarEvento(String mensaje) throws IOException {
         texto.registrar(mensaje);
     }
+    public void registrarEvento(String tipo, String componente, String detalle)
+            throws IOException {
+        texto.registrar(tipo + " | " + componente + " | " + detalle);
+    }
 
     public Medicion registrarMedicion(String idComponente, TipoMedicion tipo,
                                       double valor) throws IOException {
