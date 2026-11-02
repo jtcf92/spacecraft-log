@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <!-- En los tests solo hay consola: no se crean ficheros de log -->
+        <Console name="Consola" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} %-5level %c{1} - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Solo errores: los tests no llenan la consola de mensajes -->
+        <Root level="error">
+            <AppenderRef ref="Consola"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

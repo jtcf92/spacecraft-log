@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <Console name="Consola" target="SYSTEM_OUT">
+            <!-- La consola solo muestra INFO, WARN y ERROR -->
+            <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss.SSS} %-5level %c{1} - %msg%n"/>
+        </Console>
+
+        <File name="Evidencias"
+              fileName="logs/evidencias/ejecucion_${date:dd-MM-yyyy_HH-mm-ss}.log">
+            <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss.SSS} %-5level %c{1} - %msg%n"/>
+        </File>
+        <!-- Aqui guardamos y comprimimos  -->
+        <RollingFile name="Runtime"
+                     fileName="logs/runtime/aplicacion.log"
+                     filePattern="logs/runtime/aplicacion-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{dd/MM/yyyy HH:mm:ss.SSS} %-5level %c{1} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 KB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="5"/>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <!-- NUEVO: debug, para que se generen los 4 niveles -->
+        <Root level="debug">
+            <AppenderRef ref="Consola"/>
+            <AppenderRef ref="Evidencias"/>
+            <AppenderRef ref="Runtime"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

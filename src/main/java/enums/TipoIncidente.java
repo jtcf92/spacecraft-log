@@ -1,0 +1,12 @@
+package enums;
+
+public enum TipoIncidente {
+
+    FALLO_MOTOR,
+    PERDIDA_ESCUDOS,
+    FALLO_ARMAMENTO,
+    IMPACTO_DIRECTO,
+    SOBRECALENTAMIENTO_MOTOR,
+    INDETERMINADO
+
+}
