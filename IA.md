@@ -23,3 +23,6 @@
 
 1. Teniendo en cuenta este proyecto que te adjunto y el pdf con las instrucciones, necesito que me generes los requisitos que cumple y que no y me generes un plan paso a paso de lo que debo implementar y cambiar para avanzar y entregar el proyecto
 2. Okey me quede atascado en como con el análizador forense leer el xml, podrias ayudarme generandome un ejemplo de como hacerlo y explicando paso a paso el porque de lo que has utilizado
+3. Ahora mismo en el proyecto quiero implementar logs, sin embargo no tengo mucha idea de como ingresarlo, podrias ayudarme explicando la teoria de los logs y en que parte de mi código se deberia poner 
+4. Okey, antes de entregar necesito que teniendo en cuenta los criterios del pdf analices si mi trabajo ya cumple con todos los criterios, en el caso contrario dime los errores y incumplimientos y que deberia de hacer para completarlo
+5. Por último mejora me README teniendo en cuenta mi trabajo que te he adjuntado 

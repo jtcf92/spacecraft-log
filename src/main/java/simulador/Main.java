@@ -1,3 +1,5 @@
+package simulador;
+
 import analizadorForense.AnalizadorForense;
 import enums.Estado;
 import enums.TipoIncidente;
@@ -6,12 +8,16 @@ import modeloArma.Arma;
 import modeloNave.Escudo;
 import modeloNave.MotorDeCohete;
 import modeloNave.Nave;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import persistencia.Persistencia;
 import simulador.Simulador;
 
 import java.nio.file.Path;
 
 public class Main {
+
+    private static final Logger LOG = LogManager.getLogger(Main.class);
     public static void main(String[] args) {
 
         Path rutaDatosEntrada = Path.of("datos");
@@ -43,22 +49,24 @@ public class Main {
             }
 
         } catch (EventoCriticoException e) {
-            System.out.println("Se ha detectado un evento crítico: " + e.getMessage());
-            System.out.println("Se activa el analizador forense...");
+            LOG.error("Evento crítico capturado: {}", e.getMessage());
 
-            try {
+            LOG.info("Simulación detenida. Los ficheros están en {}", rutaDatosEntrada);
+            //Es por si quiero hacer los dos al mismo tiempo
+           /* try {
                 AnalizadorForense analizador =
                         new AnalizadorForense(rutaDatosEntrada, rutaDatosSalida);
 
-                System.out.println("Incidente identificado: " + analizador.getIncidente());
-                System.out.println("Compruebe los ficheros generados en " + rutaDatosSalida);
+                LOG.info("Análisis terminado: incidente {}, resultados en {}",
+                        analizador.getIncidente(), rutaDatosSalida);
 
             } catch (Exception ex) {
-                System.err.println("Error en el analizador: " + ex.getMessage());
-            }
+                LOG.error("Fallo en el analizador forense", ex);
+            }*/
 
         } catch (Exception e) {
-            System.err.println("Error inesperado: " + e.getMessage());
+            LOG.error("Error inesperado en el simulador", e);
         }
     }
+
 }

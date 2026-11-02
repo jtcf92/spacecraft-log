@@ -12,9 +12,10 @@ import persistencia.Persistencia;
 
 import java.nio.file.Path;
 import java.util.Random;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 public class Simulador {
-
+    private static final Logger LOG = LogManager.getLogger(Simulador.class);
     private final Persistencia persistencia;
     private final Nave nave;
     private final Random azar = new Random();
@@ -27,7 +28,8 @@ public class Simulador {
 
     //Este es un simulador si se quiere hacer de forma normal
     public void ejecutar(int repeticiones) throws Exception {
-
+        LOG.info("Inicio de la simulación de la nave {} en modo normal",
+                nave.getNombre());
         persistencia.registrarEvento("INFO", "SISTEMA",
                 "Inicio de la simulación de la nave " + nave.getNombre());
         persistencia.guardarEstado(nave);
@@ -48,7 +50,8 @@ public class Simulador {
         persistencia.registrarEvento("INFO", "SISTEMA",
                 "Inicio de la simulación de la nave " + nave.getNombre());
         persistencia.guardarEstado(nave);
-
+        LOG.info("Inicio de la simulación de la nave {} con incidente forzado {}",
+                nave.getNombre(), incidente);
         for (int paso = 1; paso <= repeticiones; paso++) {
             ejecutarPaso();
             registrarMediciones();
@@ -114,7 +117,7 @@ public class Simulador {
 
     // Prepara el problema. No lanza ninguna excepción: de eso se encarga comprobarSituacionCritica
     private void provocarIncidente(TipoIncidente incidente) throws Exception {
-
+        LOG.info("Provocando el incidente {}", incidente);
         MotorDeCohete motor = nave.getMotor();
 
         switch (incidente) {
@@ -196,7 +199,8 @@ public class Simulador {
 
             persistencia.registrarEvento("CRITICO", componente, causa);
             persistencia.guardarEstado(nave);
-
+            LOG.info("Anomalía de {} guardada en TXT, BIN y XML; se lanza EventoCriticoException",
+                    componente);
 
             throw new EventoCriticoException(causa);
         }

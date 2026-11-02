@@ -21,7 +21,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 public class AnalizadorForense {
     private final Path datos;
     private final Path salida;
@@ -30,19 +31,30 @@ public class AnalizadorForense {
     private final List<Medicion> anomalas;
     private final List<Componente> componentes;
     private final TipoIncidente incidente;
-
+    private static final Logger LOG = LogManager.getLogger(AnalizadorForense.class);
     public AnalizadorForense(Path datos, Path salida) throws Exception {
         this.datos = datos;
         this.salida = salida;
+
+        LOG.info("Inicio del análisis forense. Datos: {} Salida: {}", datos, salida);
+
         this.criticas = leerTexto();
         this.anomalas = leerAnomalias();
         this.componentes = leerXml();
         this.incidente = identificar();
+
+        if (incidente == TipoIncidente.INDETERMINADO) {
+            LOG.warn("Las pruebas no permiten identificar ningún incidente");
+        } else {
+            LOG.info("Incidente identificado: {}", incidente);
+        }
+
         Files.createDirectories(salida);
         escribirInforme();
         escribirBinario();
         escribirXml();
 
+        LOG.info("Análisis terminado. Informe, BIN y XML escritos en {}", salida);
     }
 
     // === cortesia de la IA ====
@@ -59,49 +71,57 @@ public class AnalizadorForense {
         }
     }
 
-    public List<String> leerTexto() throws IOException {
-        List<String> criticas = new ArrayList<>();
+    private List<String> leerTexto() throws IOException {
+        List<String> lista = new ArrayList<>();
         Path ruta = datos.resolve("operaciones.txt");
 
         if (!Files.exists(ruta)) {
-            return criticas;   // si no hay fichero, devolvemos la lista vacía
+            LOG.warn("No existe {}: se analiza sin esta fuente", ruta);
+            return lista;
         }
 
-        for (String linea : Files.readAllLines(ruta)) {
+        List<String> lineas = Files.readAllLines(ruta);
+        for (String linea : lineas) {
             if (linea.contains("| CRITICO |")) {
-                criticas.add(linea);
+                lista.add(linea);
             }
         }
-        return criticas;
+
+        LOG.debug("TXT leído: {} líneas, {} críticas", lineas.size(), lista.size());
+        return lista;
     }
 
-    public List<Medicion> leerAnomalias() throws IOException {
-        List<Medicion> anomalas = new ArrayList<>();
+    private List<Medicion> leerAnomalias() throws IOException {
+        List<Medicion> lista = new ArrayList<>();
         Path ruta = datos.resolve("mediciones.dat");
 
         if (!Files.exists(ruta)) {
-            return anomalas;
+            LOG.warn("No existe {}: se analiza sin esta fuente", ruta);
+            return lista;
         }
 
         RegistroBinario binario = new RegistroBinario(ruta);
+        List<Medicion> todas = binario.leerTodas();
 
-        for (Medicion medicion : binario.leerTodas()) {
+        for (Medicion medicion : todas) {
             if (medicion.isAnomala()) {
-                anomalas.add(medicion);
+                lista.add(medicion);
             }
         }
-        return anomalas;
+
+        LOG.info("BIN leído: {} registros procesados, {} anómalos", todas.size(), lista.size());
+        return lista;
     }
 
-
-    public List<Componente> leerXml() throws Exception {
+    private List<Componente> leerXml() throws Exception {
         List<Componente> lista = new ArrayList<>();
         Path ruta = datos.resolve("estado.xml");
 
         if (!Files.exists(ruta)) {
+            LOG.warn("No existe {}: se analiza sin esta fuente", ruta);
             return lista;
         }
-//cargamos la estructura xml en memoria
+
         Document documento = DocumentBuilderFactory.newInstance()
                 .newDocumentBuilder()
                 .parse(ruta.toFile());
@@ -121,9 +141,10 @@ public class AnalizadorForense {
                 lista.add(new Componente(id, etiqueta, estado));
             }
         }
+
+        LOG.debug("XML leído: {} componentes", lista.size());
         return lista;
     }
-
     private TipoIncidente identificar() {
 
         String motor = estadoDe("motor");
@@ -133,7 +154,8 @@ public class AnalizadorForense {
         boolean textoMotor = criticoMenciona("| MOTOR-");
         boolean textoEscudo = criticoMenciona("| ESCUDO |");
         boolean textoArma = criticoMenciona("| ARMA-");
-
+        LOG.debug("Pruebas: textoMotor={} textoEscudo={} textoArma={} motor={} escudo={}",
+                textoMotor, textoEscudo, textoArma, motor, escudo);
         if (textoMotor && hayAnomalia(TipoMedicion.CALOR_MOTOR)
                 && motor.equals("AVERIADO")) {
             return TipoIncidente.SOBRECALENTAMIENTO_MOTOR;
@@ -303,4 +325,5 @@ public class AnalizadorForense {
     public TipoIncidente getIncidente() {
         return incidente;
     }
+
 }

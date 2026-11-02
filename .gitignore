@@ -1,4 +1,6 @@
 ### IntelliJ IDEA ###
+ .idea/
+  *.iml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
@@ -30,6 +32,5 @@ bin/
 .DS_Store
 
 ### Ficheros generados por la ejecución ###
-datos/
-salida/
+
 target/
